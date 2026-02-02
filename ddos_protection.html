@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}DDoS Protection - ESTPL Security Solutions{% endblock %}
+{% block page_title %}DDoS Protection & Mitigation{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-shield-virus"></i> DDoS Protection Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>DDoS Protection Active</strong> - Your system is protected against distributed denial-of-service attacks.
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h3 class="text-primary">100</h3>
+                        <p class="text-muted">Requests/Min Limit</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h3 class="text-success">0</h3>
+                        <p class="text-muted">Blocked IPs</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h3 class="text-info">Active</h3>
+                        <p class="text-muted">Protection Status</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

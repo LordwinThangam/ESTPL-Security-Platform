@@ -1,0 +1,125 @@
+
+{% extends "base.html" %}
+{% block title %}System Settings{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h4><i class="fas fa-cog"></i> System Settings & Configuration</h4>
+            <p class="mb-0">Security Policies • System Preferences • Integrations</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-shield-alt"></i> Security Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6>Password Policy</h6>
+                            <p><strong>Minimum Length:</strong> {{ settings.security_settings.password_policy.min_length }} characters</p>
+                            <p><strong>Requirements:</strong></p>
+                            <ul>
+                                <li>Uppercase: {% if settings.security_settings.password_policy.require_uppercase %}<span class="badge badge-success">Required</span>{% else %}<span class="badge badge-secondary">Optional</span>{% endif %}</li>
+                                <li>Numbers: {% if settings.security_settings.password_policy.require_numbers %}<span class="badge badge-success">Required</span>{% else %}<span class="badge badge-secondary">Optional</span>{% endif %}</li>
+                                <li>Special Characters: {% if settings.security_settings.password_policy.require_special_chars %}<span class="badge badge-success">Required</span>{% else %}<span class="badge badge-secondary">Optional</span>{% endif %}</li>
+                            </ul>
+                            <p><strong>Password Expiry:</strong> {{ settings.security_settings.password_policy.password_expiry_days }} days</p>
+                            
+                            <h6 class="mt-3">Session Management</h6>
+                            <p><strong>Session Timeout:</strong> {{ settings.security_settings.session_management.session_timeout }} minutes</p>
+                            <p><strong>Max Concurrent Sessions:</strong> {{ settings.security_settings.session_management.max_concurrent_sessions }}</p>
+                            <p><strong>Idle Timeout:</strong> {{ settings.security_settings.session_management.idle_timeout }} minutes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-eye"></i> Monitoring Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Log Level:</strong> <span class="badge badge-info">{{ settings.monitoring_settings.log_level }}</span></p>
+                            <p><strong>Log Retention:</strong> {{ settings.monitoring_settings.log_retention_days }} days</p>
+                            
+                            <h6>Alert Thresholds</h6>
+                            <ul>
+                                <li>Failed Logins: {{ settings.monitoring_settings.alert_thresholds.failed_logins }}</li>
+                                <li>Suspicious Activity: {{ settings.monitoring_settings.alert_thresholds.suspicious_activity }}</li>
+                                <li>Resource Usage: {{ settings.monitoring_settings.alert_thresholds.resource_usage }}%</li>
+                            </ul>
+                            
+                            <h6>Notification Channels</h6>
+                            <ul>
+                                <li>Email: {% if settings.monitoring_settings.notification_channels.email %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-secondary">Disabled</span>{% endif %}</li>
+                                <li>SMS: {% if settings.monitoring_settings.notification_channels.sms %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-secondary">Disabled</span>{% endif %}</li>
+                                <li>Webhook: {% if settings.monitoring_settings.notification_channels.webhook %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-secondary">Disabled</span>{% endif %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-database"></i> Backup Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Automatic Backup:</strong> {% if settings.backup_settings.automatic_backup %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-secondary">Disabled</span>{% endif %}</p>
+                            <p><strong>Frequency:</strong> {{ settings.backup_settings.backup_frequency }}</p>
+                            <p><strong>Retention:</strong> {{ settings.backup_settings.backup_retention }} days</p>
+                            <p><strong>Location:</strong> <code>{{ settings.backup_settings.backup_location }}</code></p>
+                            <p><strong>Encryption:</strong> {% if settings.backup_settings.encrypted_backups %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-warning">Disabled</span>{% endif %}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-plug"></i> Integration Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>API Access:</strong> {% if settings.integration_settings.api_access %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-secondary">Disabled</span>{% endif %}</p>
+                            <p><strong>Webhook Endpoints:</strong> {{ settings.integration_settings.webhook_endpoints }}</p>
+                            
+                            <h6>Third-party Integrations</h6>
+                            <ul>
+                                {% for integration, enabled in settings.integration_settings.third_party_integrations.items() %}
+                                <li>{{ integration.replace('_', ' ').title() }}: {% if enabled %}<span class="badge badge-success">Connected</span>{% else %}<span class="badge badge-secondary">Disconnected</span>{% endif %}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-server"></i> System Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Timezone:</strong> {{ settings.system_settings.timezone }}</p>
+                                    <p><strong>Date Format:</strong> {{ settings.system_settings.date_format }}</p>
+                                    <p><strong>Language:</strong> {{ settings.system_settings.language }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Theme:</strong> {{ settings.system_settings.theme }}</p>
+                                    <p><strong>Auto Updates:</strong> {% if settings.system_settings.auto_updates %}<span class="badge badge-success">Enabled</span>{% else %}<span class="badge badge-secondary">Disabled</span>{% endif %}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

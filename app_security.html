@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Application Security Scanner - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Application Security Scanner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-search"></i> Security Scanner
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="scanForm">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="target" class="form-label">Target URL/IP</label>
+                        {{ form.target(class="form-control", placeholder="https://example.com or 192.168.1.1") }}
+                        {% if form.target.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.target.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="scan_type" class="form-label">Scan Type</label>
+                        {{ form.scan_type(class="form-select") }}
+                        {% if form.scan_type.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.scan_type.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-play"></i> Start Scan
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Scan Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6>Quick Scan</h6>
+                <p class="text-muted small">Basic security headers and common vulnerabilities check.</p>
+                
+                <h6>Comprehensive Scan</h6>
+                <p class="text-muted small">Deep analysis including SSL/TLS configuration, headers, and vulnerability assessment.</p>
+                
+                <h6>Vulnerability Scan</h6>
+                <p class="text-muted small">Focused on identifying security weaknesses and potential exploits.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clipboard-list"></i> Scan Results
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="scanResults">
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-search fa-3x mb-3"></i>
+                        <h5>Ready to Scan</h5>
+                        <p>Enter a target URL or IP address and click "Start Scan" to begin security analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('scanForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const resultsDiv = document.getElementById('scanResults');
+    
+    // Show loading state
+    resultsDiv.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5 class="mt-3">Scanning in progress...</h5>
+            <p class="text-muted">This may take a few moments depending on the scan type.</p>
+        </div>
+    `;
+    
+    // Submit form
+    fetch('/enhanced-scan', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrf_token]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayResults(data);
+    })
+    .catch(error => {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${error.message || 'An error occurred during scanning.'}
+            </div>
+        `;
+    });
+});
+
+function displayResults(data) {
+    const resultsDiv = document.getElementById('scanResults');
+    
+    if (data.error) {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${data.error}
+            </div>
+        `;
+        return;
+    }
+    
+    let vulnerabilitiesHtml = '';
+    if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+        vulnerabilitiesHtml = data.vulnerabilities.map(vuln => 
+            `<li class="list-group-item list-group-item-warning">
+                <i class="fas fa-exclamation-triangle text-warning"></i> ${vuln}
+            </li>`
+        ).join('');
+    } else {
+        vulnerabilitiesHtml = '<li class="list-group-item list-group-item-success"><i class="fas fa-check text-success"></i> No vulnerabilities detected</li>';
+    }
+    
+    let headersHtml = '';
+    if (data.security_headers) {
+        headersHtml = Object.entries(data.security_headers).map(([header, value]) => {
+            const status = value === 'Missing' ? 'danger' : 'success';
+            const icon = value === 'Missing' ? 'times' : 'check';
+            return `
+                <tr>
+                    <td>${header}</td>
+                    <td><span class="badge bg-${status}"><i class="fas fa-${icon}"></i> ${value}</span></td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    resultsDiv.innerHTML = `
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle"></i> Scan Complete</h5>
+                    <p><strong>Target:</strong> ${data.url}</p>
+                    <p><strong>Timestamp:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
+                    ${data.status_code ? `<p><strong>Status Code:</strong> ${data.status_code}</p>` : ''}
+                    ${data.server ? `<p><strong>Server:</strong> ${data.server}</p>` : ''}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h6><i class="fas fa-shield-alt"></i> Security Headers</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${headersHtml}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <h6><i class="fas fa-bug"></i> Vulnerabilities</h6>
+                <ul class="list-group">
+                    ${vulnerabilitiesHtml}
+                </ul>
+            </div>
+        </div>
+    `;
+}
+</script>
+{% endblock %}

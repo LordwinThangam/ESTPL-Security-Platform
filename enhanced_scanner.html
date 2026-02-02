@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}Enhanced Security Scanner - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Enhanced Security Scanner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-search-plus"></i> Enhanced Security Scanner
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="enhancedScanForm">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="target" class="form-label">Target URL/IP</label>
+                        {{ form.target(class="form-control", placeholder="https://example.com or 192.168.1.1") }}
+                        {% if form.target.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.target.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="scan_type" class="form-label">Enhanced Scan Type</label>
+                        {{ form.scan_type(class="form-select") }}
+                        {% if form.scan_type.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.scan_type.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="output_format" class="form-label">Report Format</label>
+                        {{ form.output_format(class="form-select") }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-rocket"></i> Start Enhanced Scan
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Enhanced Scan Types
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6>Quick Scan</h6>
+                <p class="text-muted small">Basic security headers, SSL/TLS, and common vulnerabilities.</p>
+                
+                <h6>Comprehensive Scan</h6>
+                <p class="text-muted small">Deep analysis including OWASP Top 10, security misconfigurations.</p>
+                
+                <h6>Vulnerability Scan</h6>
+                <p class="text-muted small">Focused vulnerability assessment with detailed remediation.</p>
+
+                <h6>OWASP Top 10</h6>
+                <p class="text-muted small">Specific testing for OWASP Top 10 vulnerabilities.</p>
+
+                <h6>API Security</h6>
+                <p class="text-muted small">REST/GraphQL API security assessment and testing.</p>
+
+                <h6>Authentication Testing</h6>
+                <p class="text-muted small">Authentication bypass and security testing.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-clipboard-list"></i> Enhanced Scan Results
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="enhancedScanResults">
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-search-plus fa-3x mb-3"></i>
+                        <h5>Ready for Enhanced Scanning</h5>
+                        <p>Enter a target URL or IP address and select scan type to begin comprehensive security analysis.</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-shield-alt fa-2x text-primary mb-2"></i>
+                                        <h6>OWASP Top 10</h6>
+                                        <small>Complete coverage</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-file-alt fa-2x text-success mb-2"></i>
+                                        <h6>Multi-format Reports</h6>
+                                        <small>PDF, DOCX, XLSX</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-brain fa-2x text-warning mb-2"></i>
+                                        <h6>AI-Powered</h6>
+                                        <small>Smart detection</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Features Panel -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-star"></i> Enhanced Scanner Features
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-shield-virus"></i> OWASP Top 10 Coverage</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Injection Attacks</li>
+                            <li><i class="fas fa-check text-success"></i> Broken Authentication</li>
+                            <li><i class="fas fa-check text-success"></i> Sensitive Data Exposure</li>
+                            <li><i class="fas fa-check text-success"></i> XML External Entities</li>
+                            <li><i class="fas fa-check text-success"></i> Broken Access Control</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-cogs"></i> Technical Testing</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> SSL/TLS Configuration</li>
+                            <li><i class="fas fa-check text-success"></i> Security Headers</li>
+                            <li><i class="fas fa-check text-success"></i> CORS Configuration</li>
+                            <li><i class="fas fa-check text-success"></i> Cookie Security</li>
+                            <li><i class="fas fa-check text-success"></i> CSP Analysis</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-api"></i> API Security</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> REST API Testing</li>
+                            <li><i class="fas fa-check text-success"></i> GraphQL Security</li>
+                            <li><i class="fas fa-check text-success"></i> API Authentication</li>
+                            <li><i class="fas fa-check text-success"></i> Rate Limiting</li>
+                            <li><i class="fas fa-check text-success"></i> Input Validation</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-file-alt"></i> Reporting</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Executive Summary</li>
+                            <li><i class="fas fa-check text-success"></i> Technical Details</li>
+                            <li><i class="fas fa-check text-success"></i> Remediation Steps</li>
+                            <li><i class="fas fa-check text-success"></i> Risk Scoring</li>
+                            <li><i class="fas fa-check text-success"></i> Compliance Mapping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('enhancedScanForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const resultsDiv = document.getElementById('enhancedScanResults');
+    
+    // Show enhanced loading state
+    resultsDiv.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5>Enhanced Security Scanning in Progress...</h5>
+            <div class="progress mb-3" style="height: 25px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                     role="progressbar" style="width: 0%" id="scanProgress">
+                    0%
+                </div>
+            </div>
+            <p class="text-muted">Performing comprehensive security analysis...</p>
+            <div id="scanStatus">Initializing scan...</div>
+        </div>
+    `;
+    
+    // Simulate progress updates
+    let progress = 0;
+    const progressBar = document.getElementById('scanProgress');
+    const statusDiv = document.getElementById('scanStatus');
+    
+    const statusMessages = [
+        'Analyzing target...',
+        'Checking SSL/TLS configuration...',
+        'Testing security headers...',
+        'Scanning for OWASP Top 10...',
+        'Testing authentication mechanisms...',
+        'Analyzing API security...',
+        'Generating comprehensive report...'
+    ];
+    
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress > 90) progress = 90;
+        
+        progressBar.style.width = progress + '%';
+        progressBar.textContent = Math.round(progress) + '%';
+        
+        const statusIndex = Math.floor((progress / 100) * statusMessages.length);
+        if (statusMessages[statusIndex]) {
+            statusDiv.textContent = statusMessages[statusIndex];
+        }
+    }, 1000);
+    
+    // Submit form
+    fetch('/enhanced-scan', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrf_token]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
+        progressBar.textContent = '100%';
+        statusDiv.textContent = 'Scan completed!';
+        
+        setTimeout(() => {
+            displayEnhancedResults(data);
+        }, 1000);
+    })
+    .catch(error => {
+        clearInterval(progressInterval);
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${error.message || 'An error occurred during scanning.'}
+            </div>
+        `;
+    });
+});
+
+function displayEnhancedResults(data) {
+    const resultsDiv = document.getElementById('enhancedScanResults');
+    
+    if (data.error) {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${data.error}
+            </div>
+        `;
+        return;
+    }
+    
+    const riskColor = getRiskColor(data.risk_level);
+    const riskScore = data.risk_score || 0;
+    
+    let vulnerabilitiesHtml = '';
+    if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+        vulnerabilitiesHtml = data.vulnerabilities.map((vuln, index) => 
+            `<tr>
+                <td>${index + 1}</td>
+                <td><span class="badge bg-${getSeverityColor(vuln.severity)}">${vuln.type || 'Unknown'}</span></td>
+                <td><span class="badge bg-${getSeverityColor(vuln.severity)}">${(vuln.severity || 'Unknown').toUpperCase()}</span></td>
+                <td>${vuln.description || 'No description'}</td>
+                <td><small class="text-muted">${vuln.remediation || 'No remediation available'}</small></td>
+            </tr>`
+        ).join('');
+    } else {
+        vulnerabilitiesHtml = '<tr><td colspan="5" class="text-center text-muted"><i class="fas fa-check text-success"></i> No vulnerabilities detected</td></tr>';
+    }
+    
+    let headersHtml = '';
+    if (data.security_headers) {
+        headersHtml = Object.entries(data.security_headers).map(([header, value]) => {
+            const status = value === 'Missing' ? 'danger' : 'success';
+            const icon = value === 'Missing' ? 'times' : 'check';
+            return `
+                <tr>
+                    <td>${header}</td>
+                    <td><span class="badge bg-${status}"><i class="fas fa-${icon}"></i> ${value}</span></td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    resultsDiv.innerHTML = `
+        <!-- Executive Summary -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="alert alert-${riskColor} border-${riskColor}">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5><i class="fas fa-clipboard-check"></i> Enhanced Scan Complete</h5>
+                            <p class="mb-1"><strong>Target:</strong> ${data.target}</p>
+                            <p class="mb-1"><strong>Scan Type:</strong> ${data.scan_type}</p>
+                            <p class="mb-0"><strong>Timestamp:</strong> ${new Date(data.timestamp).toLocaleString()}</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="display-4 fw-bold text-${riskColor}">${riskScore}/100</div>
+                            <div class="text-${riskColor} fw-bold">${(data.risk_level || 'Unknown').toUpperCase()} RISK</div>
+                            ${data.report_path ? `<a href="/download-report/${encodeURIComponent(data.report_path)}" class="btn btn-outline-${riskColor} btn-sm mt-2"><i class="fas fa-download"></i> Download Report</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Risk Assessment -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-bug fa-2x text-danger mb-2"></i>
+                        <h4>${data.vulnerability_count || 0}</h4>
+                        <small class="text-muted">Vulnerabilities Found</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt fa-2x text-${riskColor} mb-2"></i>
+                        <h4>${riskScore}%</h4>
+                        <small class="text-muted">Risk Score</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                        <h4>${data.status_code || 'N/A'}</h4>
+                        <small class="text-muted">HTTP Status</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Results -->
+        <div class="row">
+            <div class="col-md-6">
+                <h6><i class="fas fa-shield-alt"></i> Security Headers Analysis</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${headersHtml}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <h6><i class="fas fa-exclamation-triangle"></i> Recommendations</h6>
+                <div class="list-group">
+                    ${data.recommendations ? data.recommendations.map(rec => 
+                        `<div class="list-group-item"><i class="fas fa-lightbulb text-warning"></i> ${rec}</div>`
+                    ).join('') : '<div class="list-group-item">No specific recommendations</div>'}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vulnerabilities Table -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h6><i class="fas fa-bug"></i> Vulnerability Details</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Severity</th>
+                                <th>Description</th>
+                                <th>Remediation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${vulnerabilitiesHtml}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function getRiskColor(riskLevel) {
+    switch (riskLevel) {
+        case 'critical': return 'danger';
+        case 'high': return 'warning';
+        case 'medium': return 'info';
+        case 'low': return 'success';
+        default: return 'secondary';
+    }
+}
+
+function getSeverityColor(severity) {
+    switch (severity) {
+        case 'critical': return 'danger';
+        case 'high': return 'warning';
+        case 'medium': return 'info';
+        case 'low': return 'success';
+        default: return 'secondary';
+    }
+}
+</script>
+{% endblock %}

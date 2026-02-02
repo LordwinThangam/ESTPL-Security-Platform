@@ -1,0 +1,231 @@
+
+{% extends "base.html" %}
+{% block title %}SIEM/SOAR{% endblock %}
+{% block content %}
+
+<!-- SIEM Process Flow Breakdown -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-list-ol"></i> SIEM Process Flow Stages</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-warning">
+                            <div class="card-header bg-warning text-dark">
+                                <strong>① Log Collection</strong>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Gather data from servers, firewalls, apps & endpoints</p>
+                                <small class="text-muted">Foundation of security monitoring</small>
+                                <a href="/siem-log-collection" class="btn btn-sm btn-outline-warning mt-2">Open Stage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-danger" style="border-color: #ff6600 !important;">
+                            <div class="card-header text-white" style="background-color: #ff6600;">
+                                <strong>② Normalization</strong>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Convert different log formats into a common structure</p>
+                                <small class="text-muted">Standardizes data for analysis</small>
+                                <a href="/siem-normalization" class="btn btn-sm btn-outline-danger mt-2" style="border-color: #ff6600; color: #ff6600;">Open Stage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-danger">
+                            <div class="card-header bg-danger text-white">
+                                <strong>③ Parsing & Enrichment</strong>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Add context (IP info, threat intel, geolocation)</p>
+                                <small class="text-muted">Enriches data with contextual intelligence</small>
+                                <a href="/siem-enrichment" class="btn btn-sm btn-outline-danger mt-2">Open Stage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <strong>④ Alerting & Prioritization</strong>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Flag anomalies and rank their risk level</p>
+                                <small class="text-muted">Focus on critical threats first</small>
+                                <a href="/siem-alerting" class="btn btn-sm btn-outline-info mt-2">Open Stage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-primary" style="border-color: #9c27b0 !important;">
+                            <div class="card-header text-white" style="background-color: #9c27b0;">
+                                <strong>⑤ Correlation & Detection</strong>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Link suspicious patterns across multiple sources</p>
+                                <small class="text-muted">Advanced threat detection</small>
+                                <a href="/siem-correlation" class="btn btn-sm mt-2" style="border: 1px solid #9c27b0; color: #9c27b0;">Open Stage</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <strong>⑥ SOC Response & Automation</strong>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">Analysts take action with automated workflows</p>
+                                <small class="text-muted">Rapid incident response</small>
+                                <a href="/siem-soar-response" class="btn btn-sm btn-outline-success mt-2">Open Stage</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-sync-alt"></i> <strong>⑦ Continuous Improvement:</strong> 
+                    The SIEM process is cyclical, constantly learning and adapting to new threats
+                    <a href="/siem-improvement" class="btn btn-sm btn-outline-info ms-3">Open Stage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-white" style="background-color: #6f42c1;">
+            <h4><i class="fas fa-brain"></i> SIEM/SOAR Center</h4>
+            <p class="mb-0">Security Information & Event Management • Security Orchestration • Incident Response</p>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-2">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h6>{{ stats.total_events }}</h6>
+                            <small>Total Events</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                            <h6>{{ stats.critical_alerts }}</h6>
+                            <small>Critical</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                            <h6>{{ stats.high_priority }}</h6>
+                            <small>High</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h6>{{ stats.automated_responses }}</h6>
+                            <small>Auto Responses</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h6>{{ stats.mean_time_to_detection }}</h6>
+                            <small>MTTD</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card bg-secondary text-white">
+                        <div class="card-body text-center">
+                            <h6>{{ stats.mean_time_to_response }}</h6>
+                            <small>MTTR</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-exclamation-triangle"></i> Incident Categories</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for category, count in stats.incident_categories.items() %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-capitalize">{{ category.replace('_', ' ') }}</span>
+                                <span class="badge badge-warning">{{ count }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-pie"></i> Threat Sources</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for source in stats.top_threat_sources %}
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>{{ source.source }}</span>
+                                    <span>{{ source.percentage }}% ({{ source.count }})</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar" style="width: {{ source.percentage }}%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-plug"></i> SIEM Integrations</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for integration in stats.siem_integrations %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><strong>{{ integration.name }}</strong></span>
+                                <span>
+                                    <span class="badge {% if integration.status == 'Connected' %}badge-success{% else %}badge-danger{% endif %}">{{ integration.status }}</span>
+                                    <span class="badge badge-info">{{ integration.events }} events</span>
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-robot"></i> Active Playbooks</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for playbook in stats.active_playbooks %}
+                            <div class="mb-2">
+                                <span class="badge badge-success"><i class="fas fa-play"></i> {{ playbook }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block title %}SIEM - SOAR Response{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h4><i class="fas fa-robot"></i> Stage ⑥ SOC Response & Automation</h4>
+            <p class="mb-0">Analysts take action with automated workflows</p>
+        </div>
+        <div class="card-body">
+            <!-- Metrics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ metrics.automated_responses }}</h3>
+                            <small>Automated Responses</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ metrics.manual_responses }}</h3>
+                            <small>Manual Responses</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ metrics.active_ip_blocks }}</h3>
+                            <small>Active IP Blocks</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ metrics.resolved_incidents }}</h3>
+                            <small>Resolved Incidents</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Response Actions -->
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <h5><i class="fas fa-history"></i> Recent Response Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Incident</th>
+                                    <th>Action Type</th>
+                                    <th>Automated</th>
+                                    <th>Status</th>
+                                    <th>Executed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for action in actions %}
+                                <tr>
+                                    <td>{{ action.id }}</td>
+                                    <td>{{ action.incident_id }}</td>
+                                    <td>{{ action.type }}</td>
+                                    <td>
+                                        {% if action.automated %}
+                                        <span class="badge bg-success">Auto</span>
+                                        {% else %}
+                                        <span class="badge bg-primary">Manual</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><span class="badge bg-info">{{ action.status }}</span></td>
+                                    <td>{{ action.executed_at }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blocked IPs -->
+            <div class="card mb-3">
+                <div class="card-header bg-danger text-white">
+                    <h5><i class="fas fa-ban"></i> Blocked IP Addresses</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>IP Address</th>
+                                    <th>Reason</th>
+                                    <th>Blocked At</th>
+                                    <th>Expires At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ip in blocked_ips %}
+                                <tr>
+                                    <td><code>{{ ip.ip_address }}</code></td>
+                                    <td>{{ ip.reason }}</td>
+                                    <td>{{ ip.blocked_at }}</td>
+                                    <td>{{ ip.expires_at }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Automated Playbooks -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h6><i class="fas fa-cogs"></i> Automated Playbooks Available</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>✅ Malicious IP Response (Auto)</h6>
+                            <ul class="small">
+                                <li>Block IP at firewall</li>
+                                <li>Terminate active connections</li>
+                                <li>Alert security team</li>
+                                <li>Log incident details</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>✅ Brute Force Response (Auto)</h6>
+                            <ul class="small">
+                                <li>Block source IP temporarily</li>
+                                <li>Reset affected accounts</li>
+                                <li>Enable additional authentication</li>
+                                <li>Review access logs</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>✅ Threat Signature Response (Auto)</h6>
+                            <ul class="small">
+                                <li>Block malicious traffic</li>
+                                <li>Update WAF rules</li>
+                                <li>Scan affected systems</li>
+                                <li>Alert security team</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>⚠️ Port Scanning Response (Manual)</h6>
+                            <ul class="small">
+                                <li>Log scanning activity</li>
+                                <li>Block if persistent</li>
+                                <li>Check for vulnerabilities</li>
+                                <li>Alert security team</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-4">
+                <button onclick="location.reload()" class="btn btn-success">
+                    <i class="fas fa-sync"></i> Refresh Data
+                </button>
+                <a href="/siem-dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to SIEM Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

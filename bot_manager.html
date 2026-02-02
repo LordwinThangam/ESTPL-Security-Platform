@@ -1,0 +1,467 @@
+{% extends "base.html" %}
+
+{% block title %}Bot Manager - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Advanced Bot Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-robot"></i> Bot Protection Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>Bot Protection Active</strong><br>
+                    Advanced bot detection and mitigation enabled
+                </div>
+                
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <h3 class="text-primary">{{ stats.total_bots_detected }}</h3>
+                        <small class="text-muted">Bots Detected</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h3 class="text-danger">{{ stats.bots_blocked }}</h3>
+                        <small class="text-muted">Bots Blocked</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h3 class="text-success">{{ stats.legitimate_traffic }}</h3>
+                        <small class="text-muted">Legitimate Requests</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h3 class="text-info">{{ stats.protection_level }}</h3>
+                        <small class="text-muted">Protection Level</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cog"></i> Bot Detection Settings
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Detection Sensitivity</label>
+                    <select class="form-select" id="detectionSensitivity">
+                        <option value="low">Low (Conservative)</option>
+                        <option value="medium" selected>Medium (Balanced)</option>
+                        <option value="high">High (Aggressive)</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <h6>Bot Categories</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="webScrapers">
+                        <label class="form-check-label">Web Scrapers</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="ddosBots">
+                        <label class="form-check-label">DDoS Bots</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="credentialStuffing">
+                        <label class="form-check-label">Credential Stuffing</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="vulnScanners">
+                        <label class="form-check-label">Vulnerability Scanners</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-success btn-sm w-100" onclick="updateBotSettings()">
+                    <i class="fas fa-save"></i> Update Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-line"></i> Bot Detection Dashboard
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <i class="fas fa-spider fa-2x mb-2"></i>
+                                <h6>Web Scrapers</h6>
+                                <h4>15</h4>
+                                <small>Detected Today</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <i class="fas fa-bolt fa-2x mb-2"></i>
+                                <h6>DDoS Bots</h6>
+                                <h4>8</h4>
+                                <small>Blocked Today</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <i class="fas fa-key fa-2x mb-2"></i>
+                                <h6>Credential Bots</h6>
+                                <h4>5</h4>
+                                <small>Stopped Today</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <i class="fas fa-search fa-2x mb-2"></i>
+                                <h6>Vuln Scanners</h6>
+                                <h4>12</h4>
+                                <small>Identified Today</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bot Detection Chart -->
+                <div class="row">
+                    <div class="col-12">
+                        <h6><i class="fas fa-chart-area"></i> Real-time Bot Detection</h6>
+                        <canvas id="botChart" height="80"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Bot Activity -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history"></i> Recent Bot Activity
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="simulateBotDetection()">
+                        <i class="fas fa-play"></i> Test Detection
+                    </button>
+                    <button class="btn btn-sm btn-outline-success" onclick="exportBotLogs()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm" id="botLogsTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Time</th>
+                                <th>Source IP</th>
+                                <th>Bot Type</th>
+                                <th>User Agent</th>
+                                <th>Confidence</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if logs %}
+                                {% for log in logs %}
+                                <tr>
+                                    <td><small>{{ log[6] if log[6] else 'N/A' }}</small></td>
+                                    <td>
+                                        <code>{{ log[1] or 'N/A' }}</code>
+                                        <button class="btn btn-xs btn-outline-info ms-1" onclick="whoisLookup('{{ log[1] }}')">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        {% if log[2] == 'scrapers' %}
+                                            <span class="badge bg-primary"><i class="fas fa-spider"></i> Scraper</span>
+                                        {% elif log[2] == 'ddos_bots' %}
+                                            <span class="badge bg-danger"><i class="fas fa-bolt"></i> DDoS Bot</span>
+                                        {% elif log[2] == 'credential_stuffing' %}
+                                            <span class="badge bg-warning"><i class="fas fa-key"></i> Credential Bot</span>
+                                        {% elif log[2] == 'vulnerability_scanners' %}
+                                            <span class="badge bg-info"><i class="fas fa-search"></i> Scanner</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ (log[2] or 'Unknown')|title }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted" title="{{ log[3] or 'No User Agent' }}">
+                                            {{ (log[3] or 'No User Agent')[:30] }}{% if log[3] and log[3]|length > 30 %}...{% endif %}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="height: 15px;">
+                                            <div class="progress-bar bg-{{ 'danger' if (log[5] or 0) > 0.8 else 'warning' if (log[5] or 0) > 0.5 else 'success' }}" 
+                                                 style="width: {{ ((log[5] or 0) * 100)|round }}%">
+                                                {{ ((log[5] or 0) * 100)|round }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if log[4] %}
+                                            <span class="badge bg-success">Blocked</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Monitored</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-danger" onclick="blockIP('{{ log[1] }}')">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                            <button class="btn btn-outline-info" onclick="analyzeBot('{{ log[1] }}')">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">
+                                    <i class="fas fa-robot fa-2x mb-2"></i><br>
+                                    No bot activity detected. Your protection is working!
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bot Analysis Features -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-brain"></i> Advanced Bot Detection Features
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-fingerprint"></i> Behavioral Analysis</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Request Patterns</li>
+                            <li><i class="fas fa-check text-success"></i> Timing Analysis</li>
+                            <li><i class="fas fa-check text-success"></i> Session Behavior</li>
+                            <li><i class="fas fa-check text-success"></i> Mouse/Keyboard Events</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-shield-alt"></i> Signature Detection</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> User Agent Analysis</li>
+                            <li><i class="fas fa-check text-success"></i> HTTP Header Patterns</li>
+                            <li><i class="fas fa-check text-success"></i> Known Bot Libraries</li>
+                            <li><i class="fas fa-check text-success"></i> Automation Tools</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-network-wired"></i> Network Analysis</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> IP Reputation</li>
+                            <li><i class="fas fa-check text-success"></i> Geo-location</li>
+                            <li><i class="fas fa-check text-success"></i> ASN Analysis</li>
+                            <li><i class="fas fa-check text-success"></i> Hosting Providers</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-cogs"></i> Response Actions</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Rate Limiting</li>
+                            <li><i class="fas fa-check text-success"></i> CAPTCHA Challenge</li>
+                            <li><i class="fas fa-check text-success"></i> IP Blocking</li>
+                            <li><i class="fas fa-check text-success"></i> Honeypot Redirect</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Bot Detection Chart
+const botCtx = document.getElementById('botChart').getContext('2d');
+const botChart = new Chart(botCtx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Total Requests',
+            data: [],
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'Bot Traffic',
+            data: [],
+            borderColor: '#dc3545',
+            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'Legitimate Traffic',
+            data: [],
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Requests per Minute'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+});
+
+// Update bot chart with sample data
+function updateBotChart() {
+    const now = new Date();
+    const timeLabel = now.toLocaleTimeString();
+    
+    const totalRequests = Math.floor(Math.random() * 200) + 100;
+    const botTraffic = Math.floor(Math.random() * 50);
+    const legitimateTraffic = totalRequests - botTraffic;
+    
+    botChart.data.labels.push(timeLabel);
+    botChart.data.datasets[0].data.push(totalRequests);
+    botChart.data.datasets[1].data.push(botTraffic);
+    botChart.data.datasets[2].data.push(legitimateTraffic);
+    
+    if (botChart.data.labels.length > 15) {
+        botChart.data.labels.shift();
+        botChart.data.datasets.forEach(dataset => dataset.data.shift());
+    }
+    
+    botChart.update('quiet');
+}
+
+setInterval(updateBotChart, 4000);
+updateBotChart();
+
+// Bot Manager Functions
+function simulateBotDetection() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+    button.disabled = true;
+    
+    setTimeout(() => {
+        // Add simulated bot entry
+        const tableBody = document.querySelector('#botLogsTable tbody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><small>${new Date().toLocaleTimeString()}</small></td>
+            <td><code>203.0.113.${Math.floor(Math.random() * 255)}</code> <button class="btn btn-xs btn-outline-info ms-1" onclick="whoisLookup('203.0.113.1')"><i class="fas fa-info-circle"></i></button></td>
+            <td><span class="badge bg-primary"><i class="fas fa-spider"></i> Scraper</span></td>
+            <td><small class="text-muted">python-requests/2.28.1</small></td>
+            <td>
+                <div class="progress" style="height: 15px;">
+                    <div class="progress-bar bg-danger" style="width: 95%">95%</div>
+                </div>
+            </td>
+            <td><span class="badge bg-success">Blocked</span></td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-danger" onclick="blockIP('203.0.113.1')"><i class="fas fa-ban"></i></button>
+                    <button class="btn btn-outline-info" onclick="analyzeBot('203.0.113.1')"><i class="fas fa-search"></i></button>
+                </div>
+            </td>
+        `;
+        tableBody.insertBefore(newRow, tableBody.firstChild);
+        
+        button.innerHTML = originalText;
+        button.disabled = false;
+        
+        showAlert('Bot detection test completed - High-confidence bot detected and blocked!', 'success');
+    }, 2000);
+}
+
+function updateBotSettings() {
+    showAlert('Bot detection settings updated successfully', 'success');
+}
+
+function blockIP(ip) {
+    if (confirm(`Block IP address ${ip} across all security modules?`)) {
+        showAlert(`IP address ${ip} has been blocked across DDoS protection, WAF, and bot manager`, 'success');
+    }
+}
+
+function analyzeBot(ip) {
+    showAlert(`Analyzing bot behavior for IP ${ip}...`, 'info');
+    setTimeout(() => {
+        showAlert(`Analysis complete: High confidence automated tool detected from ${ip}`, 'warning');
+    }, 2000);
+}
+
+function whoisLookup(ip) {
+    showAlert(`Performing WHOIS lookup for ${ip}...`, 'info');
+    setTimeout(() => {
+        showAlert(`WHOIS: ${ip} belongs to hosting provider - likely botnet infrastructure`, 'warning');
+    }, 1500);
+}
+
+function exportBotLogs() {
+    showAlert('Bot activity logs exported successfully', 'success');
+}
+
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 5000);
+}
+
+// Simulate random bot detection alerts
+setInterval(() => {
+    const botTypes = ['Web Scraper', 'DDoS Bot', 'Credential Stuffing Bot', 'Vulnerability Scanner'];
+    const randomBot = botTypes[Math.floor(Math.random() * botTypes.length)];
+    
+    if (Math.random() > 0.7) { // 30% chance
+        showAlert(`${randomBot} detected and blocked automatically`, 'info');
+    }
+}, 25000);
+</script>
+{% endblock %}

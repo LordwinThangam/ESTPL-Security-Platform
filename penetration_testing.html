@@ -1,0 +1,84 @@
+
+{% extends "base.html" %}
+{% block title %}Penetration Testing{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h4><i class="fas fa-user-secret"></i> Automated Penetration Testing Suite</h4>
+                </div>
+                <div class="card-body">
+                    <form id="pentestForm">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Target System</label>
+                                    <input type="text" class="form-control" name="target" placeholder="target.example.com" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Test Type</label>
+                                    <select class="form-control" name="test_type">
+                                        <option value="comprehensive">Comprehensive Test</option>
+                                        <option value="web_app">Web Application</option>
+                                        <option value="network">Network Infrastructure</option>
+                                        <option value="social_engineering">Social Engineering</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark">
+                            <i class="fas fa-bug"></i> Start Penetration Test
+                        </button>
+                    </form>
+                    
+                    <div id="pentestResults" class="mt-4" style="display: none;">
+                        <h5>Penetration Test Results</h5>
+                        <div id="pentestContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('pentestForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    document.getElementById('pentestResults').style.display = 'block';
+    document.getElementById('pentestContent').innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Running penetration tests...</div>';
+    
+    fetch('/run-pentest', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            let html = '<div class="alert alert-info">' + data.summary + '</div>';
+            html += '<div class="row">';
+            html += '<div class="col-md-6"><h6>Test Categories:</h6><ul>';
+            data.results.tests_executed.forEach(test => {
+                html += '<li><strong>' + test.category + '</strong> - ' + test.status + ' (' + test.findings + ' findings)</li>';
+            });
+            html += '</ul></div>';
+            html += '<div class="col-md-6"><h6>Critical Findings:</h6><ul>';
+            data.results.critical_findings.forEach(finding => {
+                html += '<li><strong>' + finding.title + '</strong> (CVSS: ' + finding.cvss + ')</li>';
+            });
+            html += '</ul></div>';
+            html += '</div>';
+            document.getElementById('pentestContent').innerHTML = html;
+        } else {
+            document.getElementById('pentestContent').innerHTML = '<div class="alert alert-danger">Error: ' + data.error + '</div>';
+        }
+    });
+});
+</script>
+{% endblock %}

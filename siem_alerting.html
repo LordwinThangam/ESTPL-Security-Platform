@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}SIEM - Alerting{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-info text-white">
+            <h4><i class="fas fa-bell"></i> Stage ④ Alerting & Prioritization</h4>
+            <p class="mb-0">Flag anomalies and rank their risk level</p>
+        </div>
+        <div class="card-body">
+            <!-- Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.new_alerts }}</h3>
+                            <small>New Alerts</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.critical_alerts }}</h3>
+                            <small>Critical</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.high_alerts }}</h3>
+                            <small>High Severity</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.just_generated }}</h3>
+                            <small>Just Generated</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Alerts -->
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Active Alerts</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Severity</th>
+                                    <th>Priority</th>
+                                    <th>Title</th>
+                                    <th>Source IP</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alert in alerts %}
+                                <tr>
+                                    <td>{{ alert.id }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'danger' if alert.severity == 'critical' else 'warning' if alert.severity == 'high' else 'info' }}">
+                                            {{ alert.severity.upper() }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">P{{ alert.priority }}</span>
+                                    </td>
+                                    <td>{{ alert.title }}</td>
+                                    <td><code>{{ alert.source_ip }}</code></td>
+                                    <td>{{ alert.created_at }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alert Types -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6><i class="fas fa-list"></i> Alert Types Generated</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <ul class="list-unstyled">
+                                <li>🔴 Malicious IP detected (Risk: 95)</li>
+                                <li>🔴 Threat signature match (Risk: 85)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-unstyled">
+                                <li>🟠 High severity events (Risk: 70-90)</li>
+                                <li>🟡 Suspicious port access (Risk: 60)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <ul class="list-unstyled">
+                                <li>🟢 Failed login attempts</li>
+                                <li>🟢 Port scanning activity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-4">
+                <button onclick="location.reload()" class="btn btn-info">
+                    <i class="fas fa-sync"></i> Refresh Alerts
+                </button>
+                <a href="/siem-dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to SIEM Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

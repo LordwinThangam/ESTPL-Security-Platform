@@ -1,0 +1,102 @@
+
+{% extends "base.html" %}
+{% block title %}Traffic Control{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h4><i class="fas fa-traffic-light"></i> Advanced Traffic Control Center</h4>
+            <p class="mb-0">Bandwidth Management • QoS • Network Flow Control</p>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h5>{{ stats.total_bandwidth }}</h5>
+                            <small>Total Bandwidth</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h5>{{ stats.used_bandwidth }}</h5>
+                            <small>Used Bandwidth</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h5>{{ stats.active_connections }}</h5>
+                            <small>Active Connections</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                            <h5>{{ stats.blocked_connections }}</h5>
+                            <small>Blocked Connections</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cog"></i> QoS Classes</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for class_name, details in stats.qos_classes.items() %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-capitalize"><strong>{{ class_name }}</strong></span>
+                                <span>{{ details.bandwidth }} ({{ details.connections }} conn)</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-bar"></i> Protocol Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for protocol in stats.top_protocols %}
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span><strong>{{ protocol.protocol }}</strong></span>
+                                    <span>{{ protocol.percentage }}% ({{ protocol.bandwidth }})</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar" style="width: {{ protocol.percentage }}%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-info-circle"></i> Traffic Control Status</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Traffic Shaping:</strong> <span class="badge badge-success">{{ stats.traffic_shaping }}</span></p>
+                            <p><strong>Bandwidth Monitoring:</strong> <span class="badge badge-success">{{ stats.bandwidth_monitoring }}</span></p>
+                            <p><strong>Active QoS Policies:</strong> <span class="badge badge-info">{{ stats.qos_policies }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

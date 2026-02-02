@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Threat Intelligence - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Threat Intelligence{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-plus"></i> Add Threat Data</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('add_threat') }}">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.source.label(class="form-label") }}
+                        {{ form.source(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.threat_data.label(class="form-label") }}
+                        {{ form.threat_data(class="form-control", rows="4") }}
+                    </div>
+                    {{ form.submit(class="btn btn-primary") }}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-eye"></i> Recent Threat Intelligence</h5>
+            </div>
+            <div class="card-body">
+                {% if threats %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr><th>Source</th><th>Data</th><th>Date</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for threat in threats %}
+                                <tr>
+                                    <td>{{ threat[2] }}</td>
+                                    <td>{{ threat[3][:100] }}{% if threat[3]|length > 100 %}...{% endif %}</td>
+                                    <td>{{ threat[5] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No threat intelligence data yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

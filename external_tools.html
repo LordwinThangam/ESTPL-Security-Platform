@@ -1,0 +1,532 @@
+{% extends "base.html" %}
+
+{% block title %}External Security Tools - ESTPL{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-white mb-3">
+                <i class="fas fa-toolbox"></i> External Security Tools Integration
+            </h2>
+            <p class="text-white-50">
+                Comprehensive collection of industry-standard security tools with Windows deployment instructions.
+                All tools are FREE and open-source.
+            </p>
+        </div>
+    </div>
+
+    <!-- Category: Penetration Testing -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <h4 class="text-info"><i class="fas fa-shield-alt"></i> Penetration Testing Tools</h4>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <!-- Metasploit Framework -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-bomb"></i> Metasploit Framework</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        World's most used penetration testing framework with extensive exploit database and payload generation capabilities.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-danger">Penetration Testing</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download installer from metasploit.com</li>
+                        <li>Run installer as Administrator</li>
+                        <li>Open Command Prompt: <code>msfconsole</code></li>
+                        <li>Update: <code>msfupdate</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://www.metasploit.com/" target="_blank" class="btn btn-danger btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://docs.metasploit.com/" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Burp Suite Community -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-warning h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-spider"></i> Burp Suite Community</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Leading toolkit for web application security testing with powerful proxy and scanning capabilities.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning text-dark">Web Security</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from portswigger.net/burp/communitydownload</li>
+                        <li>Install Java JDK if needed</li>
+                        <li>Run installer, launch Burp Suite</li>
+                        <li>Configure browser proxy to 127.0.0.1:8080</li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://portswigger.net/burp/communitydownload" target="_blank" class="btn btn-warning btn-sm text-dark">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://portswigger.net/burp/documentation" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OWASP ZAP -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-primary h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-bug"></i> OWASP ZAP</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Free open-source web app security scanner with automated scanning and manual testing tools.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-primary">Web Scanner</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from zaproxy.org/download</li>
+                        <li>Run installer (.exe)</li>
+                        <li>Launch ZAP, configure browser proxy</li>
+                        <li>Start Quick Scan or Manual Explore</li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://www.zaproxy.org/download/" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://www.zaproxy.org/docs/" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SQLMap -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-database"></i> SQLMap</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Automated SQL injection and database takeover tool supporting multiple database systems.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-danger">SQL Injection</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Install Python 3.x from python.org</li>
+                        <li>Download: <code>git clone https://github.com/sqlmapproject/sqlmap.git</code></li>
+                        <li>Navigate to folder: <code>cd sqlmap</code></li>
+                        <li>Run: <code>python sqlmap.py -h</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://github.com/sqlmapproject/sqlmap" target="_blank" class="btn btn-danger btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://github.com/sqlmapproject/sqlmap/wiki" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category: Network Analysis -->
+    <div class="row mb-3 mt-5">
+        <div class="col-12">
+            <h4 class="text-info"><i class="fas fa-network-wired"></i> Network Analysis Tools</h4>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <!-- Nmap -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-success h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-radar"></i> Nmap <span class="badge bg-light text-success">Integrated</span></h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Network discovery and security auditing tool. Already integrated in ESTPL platform.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-success">Network Scanner</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from nmap.org/download.html</li>
+                        <li>Run installer (includes Npcap)</li>
+                        <li>Open Command Prompt: <code>nmap -h</code></li>
+                        <li>Basic scan: <code>nmap 192.168.1.1</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://nmap.org/download.html" target="_blank" class="btn btn-success btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://nmap.org/book/man.html" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wireshark -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-info h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-search"></i> Wireshark</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        World's foremost network protocol analyzer for packet capture and deep inspection.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-info">Packet Analysis</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from wireshark.org/download.html</li>
+                        <li>Run installer (includes Npcap)</li>
+                        <li>Launch Wireshark, select network interface</li>
+                        <li>Click "Start capturing packets"</li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://www.wireshark.org/download.html" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://www.wireshark.org/docs/" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aircrack-ng -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-warning h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-wifi"></i> Aircrack-ng</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Complete suite for wireless network security assessment and password cracking.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning text-dark">Wireless Security</span>
+                        <span class="badge bg-secondary">Windows/Linux</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from aircrack-ng.org/downloads.html</li>
+                        <li>Requires USB WiFi adapter with monitor mode</li>
+                        <li>Install drivers and Aircrack-ng suite</li>
+                        <li>Run: <code>aircrack-ng --help</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://www.aircrack-ng.org/downloads.html" target="_blank" class="btn btn-warning btn-sm text-dark">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://www.aircrack-ng.org/documentation.html" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category: Firewall/Router -->
+    <div class="row mb-3 mt-5">
+        <div class="col-12">
+            <h4 class="text-info"><i class="fas fa-fire"></i> Firewall & Router</h4>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <!-- pfSense -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-primary h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-fire-alt"></i> pfSense</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Enterprise-grade firewall and router based on FreeBSD with extensive features.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-primary">Firewall</span>
+                        <span class="badge bg-secondary">VM/Hardware</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup (VM):</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download ISO from pfsense.org/download</li>
+                        <li>Install VirtualBox or VMware</li>
+                        <li>Create VM with 2 network adapters</li>
+                        <li>Boot ISO, follow installation wizard</li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://www.pfsense.org/download/" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://docs.netgate.com/pfsense/en/latest/" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category: Password Security -->
+    <div class="row mb-3 mt-5">
+        <div class="col-12">
+            <h4 class="text-info"><i class="fas fa-key"></i> Password Security Tools</h4>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <!-- Hashcat -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-danger h-100">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-lock-open"></i> Hashcat</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        World's fastest password recovery tool with GPU acceleration support.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-danger">Password Cracking</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from hashcat.net/hashcat</li>
+                        <li>Extract ZIP file</li>
+                        <li>Install GPU drivers (NVIDIA/AMD)</li>
+                        <li>Run: <code>hashcat.exe -b</code> (benchmark)</li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://hashcat.net/hashcat/" target="_blank" class="btn btn-danger btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://hashcat.net/wiki/" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- John the Ripper -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-warning h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-unlock"></i> John the Ripper</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Fast password cracker with support for hundreds of hash types and encryption algorithms.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning text-dark">Password Cracking</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Download from openwall.com/john</li>
+                        <li>Extract ZIP file</li>
+                        <li>Open Command Prompt in /run directory</li>
+                        <li>Run: <code>john.exe --test</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://www.openwall.com/john/" target="_blank" class="btn btn-warning btn-sm text-dark">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://www.openwall.com/john/doc/" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category: Web Scanners -->
+    <div class="row mb-3 mt-5">
+        <div class="col-12">
+            <h4 class="text-info"><i class="fas fa-globe"></i> Web Security Scanners</h4>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <!-- Nikto -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-info h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-search-plus"></i> Nikto</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Open-source web server scanner for dangerous files, outdated versions, and vulnerabilities.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-info">Web Scanner</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Install Perl from strawberryperl.com</li>
+                        <li>Download: <code>git clone https://github.com/sullo/nikto.git</code></li>
+                        <li>Navigate to program folder: <code>cd nikto/program</code></li>
+                        <li>Run: <code>perl nikto.pl -h target.com</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://github.com/sullo/nikto" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://github.com/sullo/nikto/wiki" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gobuster -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-primary h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-folder-open"></i> Gobuster</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Fast directory/file and DNS brute-forcing tool written in Go for web enumeration.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-primary">Directory Brute-Force</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Install Go from golang.org</li>
+                        <li>Run: <code>go install github.com/OJ/gobuster/v3@latest</code></li>
+                        <li>Add to PATH: <code>%USERPROFILE%\go\bin</code></li>
+                        <li>Test: <code>gobuster version</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://github.com/OJ/gobuster" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://github.com/OJ/gobuster#readme" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drishti -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card bg-dark border-success h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-shield-virus"></i> Drishti</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text text-white-50">
+                        Comprehensive security assessment framework for vulnerability scanning and pentesting.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge bg-success">Security Framework</span>
+                        <span class="badge bg-secondary">Windows/Linux/Mac</span>
+                    </div>
+                    
+                    <h6 class="text-warning mt-3">Windows Setup:</h6>
+                    <ol class="text-white-50 small">
+                        <li>Install Python 3.x from python.org</li>
+                        <li>Download: <code>git clone https://github.com/h4cklife/drishti.git</code></li>
+                        <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+                        <li>Run: <code>python drishti.py</code></li>
+                    </ol>
+                    
+                    <div class="mt-3">
+                        <a href="https://github.com/h4cklife/drishti" target="_blank" class="btn btn-success btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                        <a href="https://github.com/h4cklife/drishti#readme" target="_blank" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-book"></i> Docs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Notice -->
+    <div class="row mt-5 mb-4">
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                <h5 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Legal Notice</h5>
+                <p class="mb-0">
+                    <strong>Important:</strong> All security tools must only be used on systems you own or have explicit written permission to test. 
+                    Unauthorized access to computer systems is illegal and punishable by law. Use these tools responsibly and ethically.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

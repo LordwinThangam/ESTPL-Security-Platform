@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}SIEM - Enrichment{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4><i class="fas fa-plus-circle"></i> Stage ③ Parsing & Enrichment</h4>
+            <p class="mb-0">Add context: IP info, threat intel, geolocation</p>
+        </div>
+        <div class="card-body">
+            <!-- Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.total_enriched }}</h3>
+                            <small>Total Enriched</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.malicious_ips_detected }}</h3>
+                            <small>Malicious IPs</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.requiring_investigation }}</h3>
+                            <small>Require Investigation</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.just_enriched }}</h3>
+                            <small>Just Enriched</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrichment Types -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h6><i class="fas fa-globe"></i> IP Intelligence</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>✅ Reputation scoring (0-100)</li>
+                                <li>✅ Private/Public detection</li>
+                                <li>✅ Malicious IP matching</li>
+                                <li>✅ Geolocation lookup</li>
+                                <li>✅ Organization identification</li>
+                                <li>✅ Reverse DNS lookup</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h6><i class="fas fa-shield-alt"></i> Threat Intelligence</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li>✅ Attack signature detection</li>
+                                <li>✅ SQL injection patterns</li>
+                                <li>✅ XSS patterns</li>
+                                <li>✅ Command injection patterns</li>
+                                <li>✅ Port risk assessment</li>
+                                <li>✅ Service identification</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Built-in Threat Database -->
+            <div class="card mt-3">
+                <div class="card-header bg-dark text-white">
+                    <h6><i class="fas fa-database"></i> Built-in Threat Database</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Known Malicious IPs:</strong>
+                            <p class="text-muted">Database of known threat actors</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Suspicious Ports:</strong>
+                            <p class="text-muted">RDP (3389), SQL (1433), SSH (22), Telnet (23), SMB (445)</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Attack Signatures:</strong>
+                            <p class="text-muted">SQL injection, XSS, Command injection patterns</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-4">
+                <button onclick="location.reload()" class="btn btn-danger">
+                    <i class="fas fa-sync"></i> Enrich More Logs
+                </button>
+                <a href="/siem-dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to SIEM Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

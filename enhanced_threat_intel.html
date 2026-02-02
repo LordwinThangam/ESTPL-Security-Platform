@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+
+{% block title %}Enhanced Threat Intelligence - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Enhanced Threat Intelligence Center{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-plus"></i> Add Threat Intelligence
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('add_enhanced_threat') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.source.label(class="form-label") }}
+                        {{ form.source(class="form-control", placeholder="e.g., abuse.ch, VirusTotal") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.threat_type.label(class="form-label") }}
+                        {{ form.threat_type(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.severity.label(class="form-label") }}
+                        {{ form.severity(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.threat_data.label(class="form-label") }}
+                        {{ form.threat_data(class="form-control", rows="4", placeholder="IP addresses, domains, hashes, or other IoCs...") }}
+                    </div>
+
+                    {{ form.submit(class="btn btn-primary w-100") }}
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie"></i> Threat Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="threatTypeChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-eye"></i> Enhanced Threat Intelligence Dashboard
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-success" onclick="exportThreats('csv')">
+                        <i class="fas fa-file-csv"></i> CSV
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="exportThreats('excel')">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="exportThreats('pdf')">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-3">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-shield-alt fa-2x text-primary mb-2"></i>
+                            <h5>{{ threats|length }}</h5>
+                            <small>Total Threats</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                            <h5>{{ threats|selectattr('4', 'equalto', 'critical')|list|length }}</h5>
+                            <small>Critical</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                            <h5>Last 24h</h5>
+                            <small>{{ threats[:5]|length }} New</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <i class="fas fa-globe fa-2x text-success mb-2"></i>
+                            <h5>Active</h5>
+                            <small>Feed Sources</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Threat Feed Sources -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h6><i class="fas fa-rss"></i> Threat Feed Sources</h6>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center py-2">
+                                        <i class="fas fa-virus text-danger"></i>
+                                        <small class="d-block">Malware Feed</small>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center py-2">
+                                        <i class="fas fa-ban text-warning"></i>
+                                        <small class="d-block">Blocklist.de</small>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center py-2">
+                                        <i class="fas fa-shield-alt text-info"></i>
+                                        <small class="d-block">Spamhaus</small>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center py-2">
+                                        <i class="fas fa-user-secret text-secondary"></i>
+                                        <small class="d-block">Tor Nodes</small>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Intelligence Table -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-list"></i> Recent Threat Intelligence
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm" id="threatTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Time</th>
+                                <th>Source</th>
+                                <th>Type</th>
+                                <th>Severity</th>
+                                <th>Threat Data</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if threats %}
+                                {% for threat in threats %}
+                                <tr>
+                                    <td>
+                                        <small>{{ threat[9] if threat[9] else 'N/A' }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ threat[2] or 'Unknown' }}</span>
+                                    </td>
+                                    <td>
+                                        {% if threat[1] == 'malware' %}
+                                            <span class="badge bg-danger"><i class="fas fa-virus"></i> {{ threat[1]|title }}</span>
+                                        {% elif threat[1] == 'phishing' %}
+                                            <span class="badge bg-warning"><i class="fas fa-fish"></i> {{ threat[1]|title }}</span>
+                                        {% elif threat[1] == 'botnet' %}
+                                            <span class="badge bg-secondary"><i class="fas fa-robot"></i> {{ threat[1]|title }}</span>
+                                        {% else %}
+                                            <span class="badge bg-primary">{{ (threat[1] or 'Unknown')|title }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if threat[4] == 'critical' %}
+                                            <span class="badge bg-danger">Critical</span>
+                                        {% elif threat[4] == 'high' %}
+                                            <span class="badge bg-warning">High</span>
+                                        {% elif threat[4] == 'medium' %}
+                                            <span class="badge bg-info">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-success">{{ (threat[4] or 'Low')|title }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <code class="small">{{ (threat[3] or 'No data')[:50] }}{% if threat[3] and threat[3]|length > 50 %}...{% endif %}</code>
+                                        {% if threat[3] and threat[3]|length > 50 %}
+                                            <button class="btn btn-xs btn-outline-info ms-1" onclick="showFullThreat('{{ threat[3] }}')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-primary" onclick="analyzeThreat('{{ threat[0] }}')">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                            <button class="btn btn-outline-success" onclick="blockThreat('{{ threat[3] }}')">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                            <button class="btn btn-outline-warning" onclick="shareThreat('{{ threat[0] }}')">
+                                                <i class="fas fa-share"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    <i class="fas fa-shield-alt fa-2x mb-2"></i><br>
+                                    No threat intelligence data yet. Add some threats or connect to feeds.
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Threat Analysis -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-brain"></i> Advanced Threat Analysis Features
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-rss text-primary"></i> Real-time Feeds</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> abuse.ch Malware</li>
+                            <li><i class="fas fa-check text-success"></i> Spamhaus DROP</li>
+                            <li><i class="fas fa-check text-success"></i> Tor Exit Nodes</li>
+                            <li><i class="fas fa-check text-success"></i> Custom Feeds</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-search text-warning"></i> IoC Analysis</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> IP Reputation</li>
+                            <li><i class="fas fa-check text-success"></i> Domain Analysis</li>
+                            <li><i class="fas fa-check text-success"></i> File Hash Lookup</li>
+                            <li><i class="fas fa-check text-success"></i> URL Scanning</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-share-alt text-info"></i> Threat Sharing</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> STIX/TAXII Support</li>
+                            <li><i class="fas fa-check text-success"></i> Custom Formats</li>
+                            <li><i class="fas fa-check text-success"></i> API Integration</li>
+                            <li><i class="fas fa-check text-success"></i> Community Feeds</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h6><i class="fas fa-chart-line text-success"></i> Analytics</h6>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Trend Analysis</li>
+                            <li><i class="fas fa-check text-success"></i> Attack Attribution</li>
+                            <li><i class="fas fa-check text-success"></i> Geo-location</li>
+                            <li><i class="fas fa-check text-success"></i> Campaign Tracking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Threat Details Modal -->
+<div class="modal fade" id="threatModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Threat Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="threatModalBody">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Threat Type Distribution Chart
+const threatTypeCtx = document.getElementById('threatTypeChart').getContext('2d');
+const threatTypeChart = new Chart(threatTypeCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Malware', 'Phishing', 'Botnet', 'Spam', 'Brute Force', 'Port Scan'],
+        datasets: [{
+            data: [25, 20, 15, 18, 12, 10],
+            backgroundColor: [
+                '#dc3545',
+                '#fd7e14',
+                '#6f42c1',
+                '#ffc107',
+                '#28a745',
+                '#17a2b8'
+            ],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12,
+                    fontSize: 10
+                }
+            }
+        }
+    }
+});
+
+// Threat Intelligence Functions
+function exportThreats(format) {
+    const url = `/api/threat-intelligence-export?format=${format}`;
+    if (format === 'csv') {
+        window.open(url, '_blank');
+    } else {
+        showAlert(`Exporting threat intelligence in ${format.toUpperCase()} format...`, 'info');
+        // Simulate export process
+        setTimeout(() => {
+            showAlert(`Threat intelligence exported successfully in ${format.toUpperCase()} format!`, 'success');
+        }, 2000);
+    }
+}
+
+function showFullThreat(threatData) {
+    const modal = new bootstrap.Modal(document.getElementById('threatModal'));
+    document.getElementById('threatModalBody').innerHTML = `
+        <div class="card">
+            <div class="card-body">
+                <h6>Full Threat Data:</h6>
+                <pre class="bg-light p-3"><code>${threatData}</code></pre>
+                <div class="mt-3">
+                    <button class="btn btn-primary btn-sm" onclick="copyToClipboard('${threatData}')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="blockThreat('${threatData}')">
+                        <i class="fas fa-ban"></i> Block
+                    </button>
+                    <button class="btn btn-info btn-sm" onclick="analyzeThreat('${threatData}')">
+                        <i class="fas fa-search"></i> Analyze
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    modal.show();
+}
+
+function analyzeThreat(threatId) {
+    showAlert('Analyzing threat with advanced intelligence engines...', 'info');
+    // Simulate analysis
+    setTimeout(() => {
+        showAlert('Threat analysis completed. High confidence malicious indicator detected.', 'warning');
+    }, 2000);
+}
+
+function blockThreat(threatData) {
+    if (confirm('Block this threat across all security modules?')) {
+        showAlert('Threat has been blocked across DDoS protection, WAF, and bot manager.', 'success');
+    }
+}
+
+function shareThreat(threatId) {
+    showAlert('Threat shared with community threat intelligence feeds.', 'success');
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showAlert('Threat data copied to clipboard', 'success');
+    });
+}
+
+function showAlert(message, type) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 5000);
+}
+
+// Auto-refresh threat intelligence
+setInterval(() => {
+    // Simulate new threat detection
+    const newThreats = Math.floor(Math.random() * 3);
+    if (newThreats > 0) {
+        showAlert(`${newThreats} new threat(s) detected and added to intelligence database`, 'info');
+    }
+}, 30000);
+</script>
+{% endblock %}

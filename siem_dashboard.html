@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block title %}SIEM Complete Dashboard{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- SIEM Process Flow Overview -->
+    <div class="card mb-4">
+        <div class="card-header bg-gradient-primary text-white">
+            <h4><i class="fas fa-project-diagram"></i> SIEM Process Flow - Complete Cycle Status</h4>
+            <p class="mb-0">The Nerve Center of Cyber Defense - All 7 Stages Operational</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Stage 1: Log Collection -->
+                <div class="col-md-3 mb-3">
+                    <div class="card border-warning h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <strong><i class="fas fa-database"></i> ① Log Collection</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-primary">{{ cycle_results.stage_1_collection.total_logs_collected }}</h3>
+                            <p class="mb-1"><small>Total Logs Collected</small></p>
+                            <p class="mb-0 text-muted"><small>Pending: {{ cycle_results.stage_1_collection.pending_processing }}</small></p>
+                            <a href="/siem-log-collection" class="btn btn-sm btn-outline-primary mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Normalization -->
+                <div class="col-md-3 mb-3">
+                    <div class="card border-danger h-100" style="border-color: #ff6600 !important;">
+                        <div class="card-header text-white" style="background-color: #ff6600;">
+                            <strong><i class="fas fa-exchange-alt"></i> ② Normalization</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-success">{{ cycle_results.stage_2_normalization }}</h3>
+                            <p class="mb-1"><small>Logs Normalized</small></p>
+                            <p class="mb-0 text-muted"><small>Standardized format</small></p>
+                            <a href="/siem-normalization" class="btn btn-sm btn-outline-success mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3: Enrichment -->
+                <div class="col-md-3 mb-3">
+                    <div class="card border-danger h-100">
+                        <div class="card-header bg-danger text-white">
+                            <strong><i class="fas fa-plus-circle"></i> ③ Enrichment</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-info">{{ cycle_results.stage_3_enrichment }}</h3>
+                            <p class="mb-1"><small>Logs Enriched</small></p>
+                            <p class="mb-0 text-muted"><small>Context added</small></p>
+                            <a href="/siem-enrichment" class="btn btn-sm btn-outline-info mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Alerting -->
+                <div class="col-md-3 mb-3">
+                    <div class="card border-info h-100">
+                        <div class="card-header bg-info text-white">
+                            <strong><i class="fas fa-bell"></i> ④ Alerting</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-warning">{{ cycle_results.stage_4_alerting }}</h3>
+                            <p class="mb-1"><small>Alerts Generated</small></p>
+                            <p class="mb-0 text-muted"><small>Prioritized</small></p>
+                            <a href="/siem-alerting" class="btn btn-sm btn-outline-warning mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <!-- Stage 5: Correlation -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-primary h-100" style="border-color: #9c27b0 !important;">
+                        <div class="card-header text-white" style="background-color: #9c27b0;">
+                            <strong><i class="fas fa-link"></i> ⑤ Correlation</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-danger">{{ cycle_results.stage_5_correlation }}</h3>
+                            <p class="mb-1"><small>Incidents Created</small></p>
+                            <p class="mb-0 text-muted"><small>Patterns linked</small></p>
+                            <a href="/siem-correlation" class="btn btn-sm btn-outline-danger mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 6: SOAR Response -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-success h-100">
+                        <div class="card-header bg-success text-white">
+                            <strong><i class="fas fa-robot"></i> ⑥ SOAR Response</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-success">{{ cycle_results.stage_6_response.automated_responses }}</h3>
+                            <p class="mb-1"><small>Automated Responses</small></p>
+                            <p class="mb-0 text-muted"><small>{{ cycle_results.stage_6_response.active_ip_blocks }} IPs blocked</small></p>
+                            <a href="/siem-soar-response" class="btn btn-sm btn-outline-success mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 7: Continuous Improvement -->
+                <div class="col-md-4 mb-3">
+                    <div class="card border-secondary h-100">
+                        <div class="card-header bg-secondary text-white">
+                            <strong><i class="fas fa-sync-alt"></i> ⑦ Improvement</strong>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="text-primary">{{ cycle_results.stage_7_improvement.learned_threat_patterns }}</h3>
+                            <p class="mb-1"><small>Threat Patterns Learned</small></p>
+                            <p class="mb-0 text-muted"><small>{{ cycle_results.stage_7_improvement.detection_accuracy }}% accuracy</small></p>
+                            <a href="/siem-improvement" class="btn btn-sm btn-outline-primary mt-2">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5><i class="fas fa-heartbeat"></i> System Status</h5>
+                </div>
+                <div class="card-body">
+                    {% for component, status in system_status.components.items() %}
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="status-indicator {% if status == 'active' %}status-active{% else %}status-warning{% endif %}"></span>
+                        <strong class="me-auto">{{ component.replace('_', ' ').title() }}</strong>
+                        <span class="badge {% if status == 'active' %}bg-success{% else %}bg-warning{% endif %}">{{ status.upper() }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5><i class="fas fa-cogs"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <button onclick="runSIEMCycle()" class="btn btn-primary btn-block mb-2">
+                        <i class="fas fa-play"></i> Run Complete SIEM Cycle
+                    </button>
+                    <button onclick="location.href='/siem-log-collection'" class="btn btn-outline-primary btn-block mb-2">
+                        <i class="fas fa-database"></i> Collect Logs
+                    </button>
+                    <button onclick="location.href='/siem-alerting'" class="btn btn-outline-warning btn-block mb-2">
+                        <i class="fas fa-bell"></i> View Alerts
+                    </button>
+                    <button onclick="location.href='/siem-soar-response'" class="btn btn-outline-success btn-block">
+                        <i class="fas fa-robot"></i> View Responses
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function runSIEMCycle() {
+    if (!confirm('Run a complete SIEM processing cycle?')) return;
+    
+    fetch('/api/siem-run-cycle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('SIEM cycle completed successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    });
+}
+</script>
+
+{% endblock %}

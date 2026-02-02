@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block title %}SIEM - Continuous Improvement{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h4><i class="fas fa-sync-alt"></i> Stage ⑦ Continuous Improvement</h4>
+            <p class="mb-0">Learn and adapt to new threats</p>
+        </div>
+        <div class="card-body">
+            <!-- Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.patterns_learned }}</h3>
+                            <small>Patterns Learned</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.threat_intel_updated }}</h3>
+                            <small>Threat Intel Updates</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.fp_recommendations }}</h3>
+                            <small>Tuning Recommendations</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3>{{ stats.report.detection_accuracy }}%</h3>
+                            <small>Detection Accuracy</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Improvement Report -->
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <h5><i class="fas fa-chart-line"></i> Improvement Report</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>📊 Learning Statistics</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td>Learned Threat Patterns:</td>
+                                    <td><strong>{{ stats.report.learned_threat_patterns }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>False Positives Identified:</td>
+                                    <td><strong>{{ stats.report.false_positives_identified }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Pending Tuning Recommendations:</td>
+                                    <td><strong>{{ stats.report.pending_tuning_recommendations }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Detection Accuracy:</td>
+                                    <td><strong class="text-success">{{ stats.report.detection_accuracy }}%</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>📈 Improvement Trend</h6>
+                            <div class="alert {% if stats.report.improvement_trend == 'positive' %}alert-success{% else %}alert-warning{% endif %}">
+                                {% if stats.report.improvement_trend == 'positive' %}
+                                <i class="fas fa-arrow-up"></i> <strong>Positive Trend</strong>
+                                <p class="mb-0">System is learning and improving detection accuracy</p>
+                                {% else %}
+                                <i class="fas fa-exclamation-triangle"></i> <strong>Needs Attention</strong>
+                                <p class="mb-0">Review tuning recommendations to improve accuracy</p>
+                                {% endif %}
+                            </div>
+                            <h6 class="mt-3">🎯 Learning Focus</h6>
+                            <ul class="small">
+                                <li>Pattern learning from resolved incidents</li>
+                                <li>False positive reduction</li>
+                                <li>Threat intelligence updates</li>
+                                <li>Rule optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tuning Recommendations -->
+            <div class="card mb-3">
+                <div class="card-header bg-warning text-dark">
+                    <h5><i class="fas fa-wrench"></i> Tuning Recommendations</h5>
+                </div>
+                <div class="card-body">
+                    {% if recommendations %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Alert Type</th>
+                                    <th>False Positives</th>
+                                    <th>Suggestion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rec in recommendations %}
+                                <tr>
+                                    <td><code>{{ rec.alert_type }}</code></td>
+                                    <td><span class="badge bg-warning">{{ rec.false_positive_count }}</span></td>
+                                    <td>{{ rec.suggestion }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> No tuning recommendations at this time. System is performing optimally.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Learning Mechanisms -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h6><i class="fas fa-brain"></i> Continuous Learning Mechanisms</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h6>🎓 Incident Learning</h6>
+                            <p class="small text-muted">Analyzes resolved incidents to identify patterns and improve future detection</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>🔍 False Positive Analysis</h6>
+                            <p class="small text-muted">Identifies common false positive patterns and suggests rule tuning</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>🔄 Threat Intelligence Updates</h6>
+                            <p class="small text-muted">Updates threat database based on observed attack patterns</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <h6>📊 Confidence Scoring</h6>
+                            <p class="small text-muted">Increases confidence scores for patterns that prove accurate</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>⚙️ Rule Optimization</h6>
+                            <p class="small text-muted">Suggests rule modifications to reduce false positives</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>📈 Accuracy Tracking</h6>
+                            <p class="small text-muted">Continuously monitors and reports detection accuracy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-4">
+                <button onclick="location.reload()" class="btn btn-secondary">
+                    <i class="fas fa-sync"></i> Update Learning Data
+                </button>
+                <a href="/siem-dashboard" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to SIEM Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

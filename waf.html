@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Web Application Firewall - ESTPL Security Solutions{% endblock %}
+{% block page_title %}Web Application Firewall (WAF){% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-firewall"></i> WAF Protection Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>WAF Active</strong> - Web Application Firewall is monitoring and filtering malicious requests.
+                </div>
+                
+                <h6>Active Protection Rules:</h6>
+                <ul class="list-group">
+                    <li class="list-group-item"><i class="fas fa-check text-success"></i> SQL Injection Protection</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success"></i> Cross-Site Scripting (XSS) Protection</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success"></i> Malicious Pattern Detection</li>
+                    <li class="list-group-item"><i class="fas fa-check text-success"></i> Rate Limiting</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
